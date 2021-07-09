@@ -1,0 +1,53 @@
+@import "../cd-mixins.sass"
+
+$primary-color: #1178a8
+$secondary-color: #fff
+
+body.custom-design-sierraventures
+  @include wlc-custom-colors($primary-color, $secondary-color)
+  // Use this space for selectors applying to the whole site.
+  // Usually adjusting hero height or font properties
+  // DON'T PUT EVERYTHING HERE, WILL MODIFY OUR DESIGN
+
+  // Change top for navigation (if source header is fixed)
+  //.navigation-tabs-inner.fixed
+  //  @media screen and ( max-width: 1098px )
+  //    top: 85px !important
+  //  @media screen and ( min-width: 1099px )
+  //    top: 65px !important
+
+  // Hero styles boilerplate
+  // $fixedHeaderHeight: 0
+  // .network-container
+  //   .network-hero
+  //     padding: ( 40px + $fixedHeaderHeight ) 0 40px
+  //    @media (min-width: 50.01em)
+  //      padding: ( 90px + $fixedHeaderHeight ) 0 90px
+  //    @media screen and (min-width: 64.01em)
+  //      padding: ( 100px + $fixedHeaderHeight ) 0 100px
+
+
+.sierraventures-custom-part
+  // This selector applies only to header, hero and footer, not modifying our platform
+
+  -webkit-font-smoothing: auto
+  -moz-osx-font-smoothing: unset
+
+  &#sierraventures-custom-header,
+  &#sierraventures-custom-footer
+    position: relative
+
+  &#sierraventures-custom-header
+    z-index: 61
+
+  &#sierraventures-custom-footer
+    z-index: 60
+
+  // Always leave this to avoid displaying the custom elements without styles
+  display: block!important
+  // Add use of any font here to apply only to header and footer
+  // font-family: 'Open Sans', sans-serif
+
+
+  // Put here all the css needed for them, even grid systems or importing bootstrap
+  @import './styles/main.scss'
