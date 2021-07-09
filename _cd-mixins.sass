@@ -1,0 +1,84 @@
+// Override monday colors
+@mixin wlc-custom-colors($custom-primary-color, $custom-secondary-color)
+  a
+    color: $custom-primary-color
+  .custom-wlc-color
+    color: $custom-primary-color
+  md-progress-linear .md-container
+    background-color: rgba($custom-primary-color, 0.3)
+  md-progress-linear .md-bar
+    background-color: $custom-primary-color
+  .navigation-tabs-wrapper .md-nav-bar md-nav-ink-bar
+    background: $custom-primary-color
+    color: $custom-primary-color
+  .md-chips.md-chips.md-removable md-chip
+    background: $custom-primary-color
+    color: $custom-secondary-color
+  .trust-navigation li.active
+    border-color: $custom-primary-color
+
+  .sidebar-menu li:before
+    background: $custom-primary-color
+
+  .monday-button
+    color: $custom-primary-color
+    border-color: $custom-primary-color
+    &::after
+      border-color: $custom-primary-color
+      border-left-color: transparent
+    &:not(.disabled):not(.loading):hover
+      background-color: $custom-primary-color
+      color: $custom-secondary-color
+    &.loading
+      &::after
+        border-color: $custom-primary-color
+        border-left-color: transparent
+    &.primary
+      background-color: $custom-primary-color
+      color: $custom-secondary-color
+      &:hover:not(.disabled):not(.loading)
+        background-color: lighten($custom-primary-color, 7%)
+        border-color: lighten($custom-primary-color, 7%)
+      &::after
+        border-color: $custom-secondary-color
+        border-left-color: transparent
+      &.loading
+        background-color: $custom-primary-color
+        color: $custom-primary-color
+
+  .wlc-onboarding-container .already-registered a,
+  .wlc-onboarding-container .onboarding-box .onboarding-box-main .account-wrapper .change-method a:hover
+    color: $custom-primary-color
+  md-radio-button.md-default-theme.md-checked .md-off,
+  md-radio-button.md-checked .md-off
+    border-color: $custom-primary-color
+  md-radio-button.md-default-theme .md-on,
+  md-radio-button .md-on
+    background-color: $custom-primary-color
+  md-checkbox.md-default-theme.md-checked .md-icon,
+  md-checkbox.md-checked .md-icon
+    background-color: $custom-primary-color
+  .loading-block .loader
+    border-top: 5px solid rgba($custom-primary-color, .2)
+    border-right: 5px solid rgba($custom-primary-color, .2)
+    border-bottom: 5px solid rgba($custom-primary-color, .2)
+    border-left: 5px solid $custom-primary-color
+  .jobs-list .job-card .job-read-more
+    color: $custom-primary-color
+    border-color: $custom-primary-color
+    &:hover
+      background: $custom-primary-color
+      color: $custom-secondary-color
+  .organization-card .see-more-wrapper span:hover,
+  .organization-card .header .organization-info .name:hover
+    color: $custom-primary-color
+  .basic-profile-wrapper .basic-profile-sidebar .icon-row .text a:hover
+    color: $custom-primary-color
+  .wlc-onboarding-container .onboarding-box .onboarding-box-header .steps .step
+    &.current,
+    &.current::before
+      background: rgba($custom-primary-color, .5)
+    &.completed
+      background: $custom-primary-color
+  .email-drop
+    border-color: $custom-primary-color

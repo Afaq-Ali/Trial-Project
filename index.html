@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+  <title>Advanced designs trial job board</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="app.js"></script>
+  <link rel="stylesheet" media="screen" href="./styles/style.css">
+  <link rel="stylesheet" media="screen" href="./styles/network.css">
+  <link rel="stylesheet" media="screen" href="./advanced-design/style.css">
+</head>
+
+<body class="custom-design-sierraventures" ng-controller="adTrial">
+  <div ng-include="'advanced-design/header.html'" class="custom-design-header {{label}}-custom-part" id="{{label}}-custom-header"></div>
+
+  <div id="main-wrapper" ui-view="" class="ng-scope">
+    <!-- ngIf: $root.inCustomDesignNetworkView && !$root.hideCustomDesign -->
+    <div id="wlc-main" class="ng-scope">
+      <div class="loading-block ng-hide" ng-show="loadingWlc" aria-hidden="true" style="">
+        <div class="loader"></div>
+      </div>
+      <div class="network-container" ng-hide="loadingWlc" aria-hidden="false" style="">
+        <div class="network-inner wlc-network wlc-frisbee" ng-class="collectionFactory.networkInnerClasses">
+          <!-- ngIf: !collectionFactory.hasCustomHero -->
+          <a id="wlc-content-top"></a><!-- ngInclude: '/network/_navigation-tabs.html' -->
+
+          <div>
+            <div class="navigation-tabs-wrapper network-navigation-tabs-wrapper wlc-navigation-tabs-wrapper ng-scope" style="height: auto;">
+              <div class="navigation-tabs-inner" style="top: 0px;">
+                <div class="container">
+                  <md-nav-bar class="navigation-tabs ng-isolate-scope" md-selected-nav-item="navigation.currentNavItem" aria-label="Tabs navigation">
+                    <div class="md-nav-bar">
+                      <nav role="navigation">
+                        <ul class="_md-nav-bar-list"  role="tablist" ng-focus="ctrl.onFocus()" aria-label="">
+                          <li><button
+                              class="_md-nav-button md-accent md-button md-ink-ripple md-active md-primary" type="button"  tabindex="0"
+                              role="tab" aria-selected="true" ng-click="ctrl.mdNavClick()" aria-label="Search jobs" style=""><span  class="_md-nav-button-text ng-scope"><span class="hide-mobile ng-scope">Search </span>jobs
+                                <!-- ngIf: collectionFactory.label == 'luxcapital' -->
+                                <!-- ngIf: collectionFactory.showNumbersInNav --></span></button></li><!-- ngIf: collectionFactory.label != 'upfront' -->
+                          <li class="md-nav-item ng-scope ng-isolate-scope" role="presentation" md-nav-click="goToOrganizations()" name="organizations"
+                             style="order: 1;"><button class="_md-nav-button md-accent md-button md-ink-ripple md-unselected" type="button"  ng-class="ctrl.getNgClassMap()"
+                              ng-blur="ctrl.setFocused(false)" ng-disabled="ctrl.disabled" tabindex="-1" role="tab" aria-selected="false" ng-click="ctrl.mdNavClick()" aria-label="Explore companies"><span
+                                class="_md-nav-button-text ng-scope"><span class="hide-mobile ng-scope">Explore </span>companies
+                                <!-- ngIf: collectionFactory.label == 'luxcapital' -->
+                                <!-- ngIf: collectionFactory.showNumbersInNav --></span></button></li><!-- end ngIf: collectionFactory.label != 'upfront' -->
+                          <!-- ngIf: collectionFactory.showTalentDatabase -->
+                        </ul>
+                      </nav>
+                      <md-nav-ink-bar ng-hide="ctrl.mdNoInkBar" aria-hidden="false" style="left: 4px; width: 119px;" class="_md-right"></md-nav-ink-bar>
+                    </div>
+                  </md-nav-bar><!-- ngIf: !$root.isLoggedinUser && collectionFactory.showTalentDatabase && collectionFactory.label != 'getroorg' -->
+                  <!-- ngIf: $root.isLoggedinUser && collectionFactory.label != 'getroorg' -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="navigation-tabs-content">
+            <!-- uiView: -->
+            <div ui-view="" class="ng-scope">
+              <section class="jobs-browser-wrapper ng-scope">
+                <div class="container">
+                  <div class="inner">
+                    <!-- ngInclude: '/network/jobs-browser/jobs-browser.html' -->
+                    <div class="ng-scope">
+                      <div class="jobs-browser ng-scope">
+                        <!-- ngIf: !browseLikedJobs && !browseDiscardedJobs -->
+                        <!-- ngInclude: '/network/filters/filters.html' -->
+                        <div  class="ng-scope">
+                          <div class="filters ng-scope" ng-class="{&#39;modal-view&#39;: displayModalView}">
+                            <div class="filters-search" ng-hide="displayModalView" aria-hidden="false"><i class="fa fa-search"></i><input
+                                class="ng-pristine ng-untouched ng-valid ng-empty" placeholder="Search job title, companies, industry..." aria-invalid="false"><i class="clear-query fa fa-times ng-hide" ng-show="filtersFactory.query !=&#39;&#39;"
+                                ng-click="clearQuery()" role="button" tabindex="0" aria-hidden="true"></i></div><a class="filters-summary-mobile" ng-click="openMobileFilters()"><i class="filter-icon fa fa-filter"></i><span
+                                ng-show="filtersFactory.totalVisibleFilters == 0" aria-hidden="false">No filters selected</span><span ng-show="filtersFactory.totalVisibleFilters &gt; 0" class="ng-binding ng-hide" aria-hidden="true">0 filters
+                                selected</span></a>
+                            <div class="filters-summary filters-summary-blank ng-hide" ng-show="displayModalView &amp;&amp; filtersFactory.totalVisibleFilters == 0" aria-hidden="true">No filters selected</div>
+                            <div class="filters-summary ng-hide display-icon" ng-show="filtersFactory.totalVisibleFilters &gt; 0" ng-class="{&#39;display-icon&#39; : !displayModalView}" aria-hidden="true">
+                              <div class="md-chips md-chips md-removable">
+                                <!-- ngRepeat: f in filtersFactory.selectedFilters track by $index -->
+                              </div>
+                            </div>
+                            <div class="filters-dropdowns">
+                              <!-- ngIf: inCollection -->
+                              <div class="filter-wrapper ng-scope"  ng-class="{&#39;open&#39;: organizationsOpen}">
+                                <div class="dropdown-trigger" id="organizations-trigger" ng-click="organizationsOpen = !organizationsOpen" role="button" tabindex="0"><label class="filter-label"><span class="ng-binding">Company</span><i
+                                      class="fa fa-angle-down"></i></label></div>
+                                <div class="organizations-dropdown filters-dropdown">
+                                  <!-- ngIf: filtersFactory.inJobsBrowse -->
+                                  <h5 class="ng-binding ng-scope">Filter jobs by company</h5><!-- end ngIf: filtersFactory.inJobsBrowse -->
+                                  <!-- ngIf: !filtersFactory.inJobsBrowse --><input ng-model="filtersFactory.organizationListFilter" placeholder="Company name" class="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+                                  <div class="filters-list">
+                                    <ul>
+                                      <!-- ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0" style=""><a ng-bind="o.name" class="ng-binding">Abbott-Fadel</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">AI Baumbach and Sons</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Dach, Leannon and Hand</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Erdman-Kassulke</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Gleason and Sons</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Hackett Group</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Koch, Wunsch and Kemmer</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Lubowitz-Jenkins</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Mitchell and Sons</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Schultz-Koch</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Schumm, Hintz and Kunze</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                      <li ng-click="selectOrganization(o)" ng-repeat="o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:&#39;name&#39; as filteredOrganizations" class="ng-scope" role="button"
+                                        tabindex="0"><a ng-bind="o.name" class="ng-binding">Vandervort, Lynch and Johnston</a></li>
+                                      <!-- end ngRepeat: o in filtersFactory.organizations | filter:filtersFactory.organizationListFilter | orderBy:'name' as filteredOrganizations -->
+                                    </ul>
+                                    <div class="no-results ng-binding ng-hide" ng-show="!filteredOrganizations.length" aria-hidden="true" style="">No matches for ""</div>
+                                  </div>
+                                </div>
+                              </div><!-- end ngIf: inCollection -->
+                              <!-- ngRepeat: cf in collectionFactory.collection.custom_filters track by cf.id -->
+                              <!-- ngIf: !$root.inOrganization() -->
+                              <div class="filter-wrapper ng-scope" ng-repeat="cf in collectionFactory.collection.custom_filters track by cf.id" ng-class="{&#39;open&#39;: customFiltersOpen[cf.id]}">
+                                <div class="dropdown-trigger" id="topics-trigger" ng-click="customFiltersOpen[cf.id] = !customFiltersOpen[cf.id]" role="button" tabindex="0"><label class="filter-label"><span ng-bind="cf.name"
+                                      class="ng-binding">Topics</span><i class="fa fa-angle-down"></i></label></div>
+                                <div class="topics-dropdown filters-dropdown">
+                                  <div class="filters-list">
+                                    <ul>
+                                      <!-- ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Business Supplies and
+                                          Equipment</a></li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Civic &amp; Social
+                                          Organization</a></li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Construction</a></li>
+                                      <!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Fishery</a></li>
+                                      <!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Graphic Design</a></li>
+                                      <!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Higher Education</a>
+                                      </li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Industrial
+                                          Automation</a></li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Information Services</a>
+                                      </li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Management
+                                          Consulting</a></li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Market Research</a></li>
+                                      <!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Military</a></li>
+                                      <!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Oil &amp; Energy</a>
+                                      </li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Outsourcing /
+                                          Offshoring</a></li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Package / Freight
+                                          Delivery</a></li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Photography</a></li>
+                                      <!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Religious
+                                          Institutions</a></li><!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                      <li ng-repeat="t in cf.values | orderBy:&#39;name&#39;" ng-click="selectTopic({name: t.name, id: t.id})" class="ng-scope" role="button" tabindex="0"><a ng-bind="t.name" class="ng-binding">Supermarkets</a></li>
+                                      <!-- end ngRepeat: t in cf.values | orderBy:'name' -->
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div><!-- end ngIf: !$root.inOrganization() -->
+                              <!-- end ngRepeat: cf in collectionFactory.collection.custom_filters track by cf.id -->
+                              <!-- ngIf: filtersFactory.inJobsBrowse && filtersFactory.jobFunctions.length && !collectionFactory.hideJobFunctionFilter -->
+                              <div class="filter-wrapper ng-scope" ng-class="{&#39;open&#39;: jobFunctionsOpen}"
+                                style="">
+                                <div class="dropdown-trigger" id="job-functions-trigger" ng-click="jobFunctionsOpen = !jobFunctionsOpen" role="button" tabindex="0"><label class="filter-label"><span>Job functions</span><i
+                                      class="fa fa-angle-down"></i></label></div>
+                                <div class="job-functions-dropdown filters-dropdown">
+                                  <div class="filters-list">
+                                    <ul>
+                                      <!-- ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Accounting &amp; Finance<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Administration<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Data Science<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Design<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">IT<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Legal<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Marketing &amp; Communications<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Other Engineering<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Product<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Sales &amp; Business
+                                          Development<i class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                      <li ng-class="{&#39;open&#39;: open}" class="ng-scope"><a ng-click="selectJobFunction(j)" class="ng-binding">Software Engineering<i
+                                            class="fa fa-angle-right ng-hide" ng-click="open = !open; $event.stopPropagation();" role="button" tabindex="0" aria-hidden="true"></i></a></li>
+                                      <!-- end ngRepeat: j in filtersFactory.jobFunctions | orderBy:'name' -->
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div><!-- end ngIf: filtersFactory.inJobsBrowse && filtersFactory.jobFunctions.length && !collectionFactory.hideJobFunctionFilter -->
+                              <!-- ngIf: !collectionFactory.hideLocationFilter -->
+                              <div class="filter-wrapper ng-scope" ng-class="{&#39;open&#39;: locationsOpen}">
+                                <div class="dropdown-trigger" id="locations-trigger" ng-click="locationsOpen = !locationsOpen" role="button" tabindex="0"><label class="filter-label"><span>Locations</span><i class="fa fa-angle-down"></i></label></div>
+                                <div class="locations-dropdown filters-dropdown">
+                                  <div class="search-locations">
+                                    <h5 class="ng-binding">Filter jobs by location</h5><input ng-model="locationSearch.term" ng-change="locationSearchTermChange()" ng-model-options="{ debounce: 300 }" placeholder="Type any location"
+                                      class="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+                                    <div class="loading-block ng-hide" ng-show="locationSearch.loading" aria-hidden="true">
+                                      <div class="loader"></div>
+                                    </div>
+                                    <div class="no-results ng-binding ng-hide" ng-show="!locationSearch.loading &amp;&amp; locationSearch.emptySearch" aria-hidden="true">No matches found for </div>
+                                    <div class="filters-list ng-hide" ng-show="!locationSearch.loading &amp;&amp; locationSearch.results.length" aria-hidden="true">
+                                      <ul>
+                                        <!-- ngRepeat: l in locationSearch.results -->
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div class="suggested-locations">
+                                    <div ng-show="filtersFactory.suggestedLocations.length" aria-hidden="false" class="" style="">
+                                      <h5>Suggested locations:</h5>
+                                      <div class="filters-list">
+                                        <ul>
+                                          <!-- ngRepeat: l in filtersFactory.suggestedLocations -->
+                                          <li ng-repeat="l in filtersFactory.suggestedLocations" class="ng-scope" style=""><a ng-click="selectLocation(l)" class="ng-binding">Dickinson Forges</a></li>
+                                          <!-- end ngRepeat: l in filtersFactory.suggestedLocations -->
+                                          <li ng-repeat="l in filtersFactory.suggestedLocations" class="ng-scope ng-enter-prepare"><a ng-click="selectLocation(l)" class="ng-binding">Düsseldorf, Germany</a></li>
+                                          <!-- end ngRepeat: l in filtersFactory.suggestedLocations -->
+                                          <li ng-repeat="l in filtersFactory.suggestedLocations" class="ng-scope ng-enter-prepare"><a ng-click="selectLocation(l)" class="ng-binding">Auckland, NZ</a></li>
+                                          <!-- end ngRepeat: l in filtersFactory.suggestedLocations -->
+                                          <li ng-repeat="l in filtersFactory.suggestedLocations" class="ng-scope ng-enter-prepare"><a ng-click="selectLocation(l)" class="ng-binding">Cairo, Egypt</a></li>
+                                          <!-- end ngRepeat: l in filtersFactory.suggestedLocations -->
+                                          <li ng-repeat="l in filtersFactory.suggestedLocations" class="ng-scope ng-enter-prepare"><a ng-click="selectLocation(l)" class="ng-binding">New York, NY</a></li>
+                                          <!-- end ngRepeat: l in filtersFactory.suggestedLocations -->
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div><!-- end ngIf: !collectionFactory.hideLocationFilter -->
+                            </div>
+                            <div class="buttons-wrapper"><a class="clear ng-hide" ng-hide="filtersFactory.totalVisibleFilters == 0" ng-click="clearFilters()" aria-hidden="true">Reset filters</a><button class="sm primary monday-button"
+                                ng-click="closeModal()">Done</button></div>
+                          </div>
+                        </div><!-- end ngIf: !browseLikedJobs && !browseDiscardedJobs -->
+                        <!-- ngIf: !jobs.length && !loading -->
+                        <div class="search-summary" ng-show="showSearchSummary" aria-hidden="false" style=""><span>Showing <b class="ng-binding">41</b> jobs
+                          </span></div>
+                        <div class="jobs-list"  aria-hidden="false" style="">
+                          <!-- ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston/jobs/5-direct-government-assistant-2" target="_blank"
+                              ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston/jobs/5-direct-government-assistant-2"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston/jobs/5-direct-government-assistant-2" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston/jobs/5-direct-government-assistant-2">
+                                  <meta itemprop="title" content="Direct Government Assistant 2">
+                                  <meta itemprop="description" content="Direct Government Assistant 2 at Vandervort, Lynch and Johnston">Direct Government Assistant 2</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/NF6crI0aTL273kpXypll&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Vandervort, Lynch and Johnston">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/NF6crI0aTL273kpXypll"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston">Vandervort, Lynch and Johnston</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope"
+                                    ng-if="j.locations.length" itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Los Angeles, CA
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Franecki Green
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/14/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/14/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>Today</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston/jobs/5-direct-government-assistant-2"
+                              target="_blank" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston/jobs/5-direct-government-assistant-2">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/lubowitz-jenkins/jobs/27-international-mining-representative-7" target="_blank"
+                              ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/lubowitz-jenkins/jobs/27-international-mining-representative-7"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/lubowitz-jenkins/jobs/27-international-mining-representative-7" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/lubowitz-jenkins/jobs/27-international-mining-representative-7">
+                                  <meta itemprop="title" content="International Mining Representative 7">
+                                  <meta itemprop="description" content="International Mining Representative 7 at Lubowitz-Jenkins">International Mining Representative 7</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/lubowitz-jenkins">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/hskxexiKRgmIRyc5zjh6&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Lubowitz-Jenkins">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/hskxexiKRgmIRyc5zjh6"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/lubowitz-jenkins">Lubowitz-Jenkins</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Düsseldorf, Germany
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Dickinson Forges
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/14/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/14/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>Today</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/lubowitz-jenkins/jobs/27-international-mining-representative-7" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/lubowitz-jenkins/jobs/27-international-mining-representative-7">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/mitchell-and-sons/jobs/22-design-administrator-6" target="_blank"
+                              ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/mitchell-and-sons/jobs/22-design-administrator-6"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/mitchell-and-sons/jobs/22-design-administrator-6" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/mitchell-and-sons/jobs/22-design-administrator-6">
+                                  <meta itemprop="title" content="Design Administrator 6">
+                                  <meta itemprop="description" content="Design Administrator 6 at Mitchell and Sons">Design Administrator 6</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/mitchell-and-sons">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/NQJZ3ifSmekNcPc8X2nV&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Mitchell and Sons">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/NQJZ3ifSmekNcPc8X2nV"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/mitchell-and-sons">Mitchell and Sons</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Cairo, Egypt
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Taylor Islands
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/14/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/14/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>Today</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/mitchell-and-sons/jobs/22-design-administrator-6" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/mitchell-and-sons/jobs/22-design-administrator-6">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/gleason-and-sons/jobs/9-it-specialist-3" target="_blank" ng-middle-click="trackJobClick(j)"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/gleason-and-sons/jobs/9-it-specialist-3"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/gleason-and-sons/jobs/9-it-specialist-3" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/gleason-and-sons/jobs/9-it-specialist-3">
+                                  <meta itemprop="title" content="IT Specialist 3">
+                                  <meta itemprop="description" content="IT Specialist 3 at Gleason and Sons">IT Specialist 3</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/gleason-and-sons">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/6mu3OT2JSGK2RJUgEjQg&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Gleason and Sons">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/6mu3OT2JSGK2RJUgEjQg"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/gleason-and-sons">Gleason and Sons</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Mumbai, India
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Orval Terrace
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/13/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/13/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>Yesterday</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/gleason-and-sons/jobs/9-it-specialist-3" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/gleason-and-sons/jobs/9-it-specialist-3">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer/jobs/41-international-analyst-11" target="_blank"
+                              ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer/jobs/41-international-analyst-11"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer/jobs/41-international-analyst-11" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer/jobs/41-international-analyst-11">
+                                  <meta itemprop="title" content="International Analyst 11">
+                                  <meta itemprop="description" content="International Analyst 11 at Koch, Wunsch and Kemmer">International Analyst 11</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/RWpd3pt8RTKTNKq5cJR0&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Koch, Wunsch and Kemmer">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/RWpd3pt8RTKTNKq5cJR0"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer">Koch, Wunsch and Kemmer</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">New York, NY
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Rempel Gardens
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/13/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/13/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>Yesterday</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer/jobs/41-international-analyst-11" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer/jobs/41-international-analyst-11">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze/jobs/31-customer-administration-coordinator-8" target="_blank"
+                              ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze/jobs/31-customer-administration-coordinator-8"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze/jobs/31-customer-administration-coordinator-8" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze/jobs/31-customer-administration-coordinator-8">
+                                  <meta itemprop="title" content="Customer Administration Coordinator 8">
+                                  <meta itemprop="description" content="Customer Administration Coordinator 8 at Schumm, Hintz and Kunze">Customer Administration Coordinator 8</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/ZSjXWrlhTUORCo6shvrI&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Schumm, Hintz and Kunze">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/ZSjXWrlhTUORCo6shvrI"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze">Schumm, Hintz and Kunze</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Auckland, NZ
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Thiel Trail
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/13/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/13/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>Yesterday</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze/jobs/31-customer-administration-coordinator-8"
+                              target="_blank" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze/jobs/31-customer-administration-coordinator-8">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/abbott-fadel/jobs/16-government-engineer-5" target="_blank" ng-middle-click="trackJobClick(j)"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/abbott-fadel/jobs/16-government-engineer-5"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/abbott-fadel/jobs/16-government-engineer-5" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/abbott-fadel/jobs/16-government-engineer-5">
+                                  <meta itemprop="title" content="Government Engineer 5">
+                                  <meta itemprop="description" content="Government Engineer 5 at Abbott-Fadel">Government Engineer 5</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/abbott-fadel">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/faWOh1FUSuuXgOFPzdrH&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Abbott-Fadel">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/faWOh1FUSuuXgOFPzdrH"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/abbott-fadel">Abbott-Fadel</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length" itemprop="jobLocation"
+                                    itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope" ng-repeat="l in j.locations"
+                                      itemprop="address">Lagos, Nigeria
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Satterfield Fort
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/13/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/13/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>Yesterday</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/abbott-fadel/jobs/16-government-engineer-5" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/abbott-fadel/jobs/16-government-engineer-5">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://littel-crooks.co/stan" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://littel-crooks.co/stan"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://littel-crooks.co/stan" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://littel-crooks.co/stan">
+                                  <meta itemprop="title" content="Sr. Frontend Engineer">
+                                  <meta itemprop="description" content="Sr. Frontend Engineer at Vandervort, Lynch and Johnston">Sr. Frontend Engineer</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/NF6crI0aTL273kpXypll&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Vandervort, Lynch and Johnston">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/NF6crI0aTL273kpXypll"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/vandervort-lynch-and-johnston">Vandervort, Lynch and Johnston</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope"
+                                    ng-if="j.locations.length" itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Cairo, Egypt
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Taylor Islands
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/12/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/12/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>2 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://littel-crooks.co/stan" target="_blank" ng-click="trackJobClick(j)" href="https://littel-crooks.co/stan">Read
+                              more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/erdman-kassulke/jobs/36-customer-coordinator-10" target="_blank"
+                              ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/erdman-kassulke/jobs/36-customer-coordinator-10"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/erdman-kassulke/jobs/36-customer-coordinator-10" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/erdman-kassulke/jobs/36-customer-coordinator-10">
+                                  <meta itemprop="title" content="Customer Coordinator 10">
+                                  <meta itemprop="description" content="Customer Coordinator 10 at Erdman-Kassulke">Customer Coordinator 10</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/erdman-kassulke">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/7hLoPcoVSKugRCHUfmUU&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Erdman-Kassulke">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/7hLoPcoVSKugRCHUfmUU"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/erdman-kassulke">Erdman-Kassulke</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Remote
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/12/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/12/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>2 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/erdman-kassulke/jobs/36-customer-coordinator-10" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/erdman-kassulke/jobs/36-customer-coordinator-10">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/dach-leannon-and-hand/jobs/33-construction-specialist-9" target="_blank"
+                              ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/dach-leannon-and-hand/jobs/33-construction-specialist-9"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/dach-leannon-and-hand/jobs/33-construction-specialist-9" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/dach-leannon-and-hand/jobs/33-construction-specialist-9">
+                                  <meta itemprop="title" content="Construction Specialist 9">
+                                  <meta itemprop="description" content="Construction Specialist 9 at Dach, Leannon and Hand">Construction Specialist 9</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/dach-leannon-and-hand">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/qv71fPZZS4SP48WRX7Lu&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Dach, Leannon and Hand">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/qv71fPZZS4SP48WRX7Lu"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/dach-leannon-and-hand">Dach, Leannon and Hand</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">New York, NY
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Rempel Gardens
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/12/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/12/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>2 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/dach-leannon-and-hand/jobs/33-construction-specialist-9" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/dach-leannon-and-hand/jobs/33-construction-specialist-9">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/hackett-group/jobs/3-design-specialist-1" target="_blank" ng-middle-click="trackJobClick(j)"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/hackett-group/jobs/3-design-specialist-1"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/hackett-group/jobs/3-design-specialist-1" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/hackett-group/jobs/3-design-specialist-1">
+                                  <meta itemprop="title" content="Design Specialist 1">
+                                  <meta itemprop="description" content="Design Specialist 1 at Hackett Group">Design Specialist 1</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/hackett-group">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/IBatGmXTEeRkfAJrXc5g&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Hackett Group">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/IBatGmXTEeRkfAJrXc5g"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/hackett-group">Hackett Group</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Cape Town, South Africa
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Marvin Curve
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/12/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/12/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>2 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/hackett-group/jobs/3-design-specialist-1" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/hackett-group/jobs/3-design-specialist-1">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://jb.demo.getro.com/companies/schultz-koch/jobs/13-future-retail-associate-4" target="_blank"
+                              ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/schultz-koch/jobs/13-future-retail-associate-4"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://jb.demo.getro.com/companies/schultz-koch/jobs/13-future-retail-associate-4" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding"
+                                  href="https://jb.demo.getro.com/companies/schultz-koch/jobs/13-future-retail-associate-4">
+                                  <meta itemprop="title" content="Future Retail Associate 4">
+                                  <meta itemprop="description" content="Future Retail Associate 4 at Schultz-Koch">Future Retail Associate 4</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/schultz-koch">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/WlfJS3lcQkKPTQFpbJhT&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Schultz-Koch">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/WlfJS3lcQkKPTQFpbJhT"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/schultz-koch">Schultz-Koch</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length" itemprop="jobLocation"
+                                    itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope" ng-repeat="l in j.locations"
+                                      itemprop="address">New York, NY
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Rempel Gardens
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/12/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/12/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>2 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://jb.demo.getro.com/companies/schultz-koch/jobs/13-future-retail-associate-4" target="_blank"
+                              ng-click="trackJobClick(j)" href="https://jb.demo.getro.com/companies/schultz-koch/jobs/13-future-retail-associate-4">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://wyman-howe.biz/cruz" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://wyman-howe.biz/cruz"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://wyman-howe.biz/cruz" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://wyman-howe.biz/cruz">
+                                  <meta itemprop="title" content="Frontend Developer">
+                                  <meta itemprop="description" content="Frontend Developer at Dach, Leannon and Hand">Frontend Developer</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/dach-leannon-and-hand">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/qv71fPZZS4SP48WRX7Lu&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Dach, Leannon and Hand">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/qv71fPZZS4SP48WRX7Lu"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/dach-leannon-and-hand">Dach, Leannon and Hand</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Düsseldorf, Germany
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Dickinson Forges
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/11/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/11/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>3 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://wyman-howe.biz/cruz" target="_blank" ng-click="trackJobClick(j)" href="https://wyman-howe.biz/cruz">Read
+                              more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://emmerich.name/tarra" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://emmerich.name/tarra"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://emmerich.name/tarra" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://emmerich.name/tarra">
+                                  <meta itemprop="title" content="Sr. Frontend Engineer">
+                                  <meta itemprop="description" content="Sr. Frontend Engineer at Koch, Wunsch and Kemmer">Sr. Frontend Engineer</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/RWpd3pt8RTKTNKq5cJR0&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Koch, Wunsch and Kemmer">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/RWpd3pt8RTKTNKq5cJR0"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/koch-wunsch-and-kemmer">Koch, Wunsch and Kemmer</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Mountain View, CA
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Sandi Prairie
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/9/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/9/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>5 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://emmerich.name/tarra" target="_blank" ng-click="trackJobClick(j)" href="https://emmerich.name/tarra">Read
+                              more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://miller.org/fannie" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://miller.org/fannie"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://miller.org/fannie" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://miller.org/fannie">
+                                  <meta itemprop="title" content="Sr. Backend Engineer">
+                                  <meta itemprop="description" content="Sr. Backend Engineer at Gleason and Sons">Sr. Backend Engineer</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/gleason-and-sons">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/6mu3OT2JSGK2RJUgEjQg&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Gleason and Sons">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/6mu3OT2JSGK2RJUgEjQg"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/gleason-and-sons">Gleason and Sons</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Lagos, Nigeria
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Satterfield Fort
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/8/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/8/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>6 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://miller.org/fannie" target="_blank" ng-click="trackJobClick(j)" href="https://miller.org/fannie">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://corwin.com/dung.dickinson" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://corwin.com/dung.dickinson"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://corwin.com/dung.dickinson" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://corwin.com/dung.dickinson">
+                                  <meta itemprop="title" content="Product IT Manager">
+                                  <meta itemprop="description" content="Product IT Manager at Lubowitz-Jenkins">Product IT Manager</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/lubowitz-jenkins">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/hskxexiKRgmIRyc5zjh6&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Lubowitz-Jenkins">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/hskxexiKRgmIRyc5zjh6"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/lubowitz-jenkins">Lubowitz-Jenkins</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Cape Town, South Africa
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Marvin Curve
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/8/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/8/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>6 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://corwin.com/dung.dickinson" target="_blank" ng-click="trackJobClick(j)"
+                              href="https://corwin.com/dung.dickinson">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://hessel.co/ira" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://hessel.co/ira"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://hessel.co/ira" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://hessel.co/ira">
+                                  <meta itemprop="title" content="Sr. Backend Engineer">
+                                  <meta itemprop="description" content="Sr. Backend Engineer at Erdman-Kassulke">Sr. Backend Engineer</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/erdman-kassulke">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/7hLoPcoVSKugRCHUfmUU&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Erdman-Kassulke">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/7hLoPcoVSKugRCHUfmUU"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/erdman-kassulke">Erdman-Kassulke</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Düsseldorf, Germany
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Dickinson Forges
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/7/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/7/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>7 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://hessel.co/ira" target="_blank" ng-click="trackJobClick(j)" href="https://hessel.co/ira">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://corwin.com/michel_rolfson" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://corwin.com/michel_rolfson"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://corwin.com/michel_rolfson" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://corwin.com/michel_rolfson">
+                                  <meta itemprop="title" content="Banking Specialist">
+                                  <meta itemprop="description" content="Banking Specialist at Lubowitz-Jenkins">Banking Specialist</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/lubowitz-jenkins">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/hskxexiKRgmIRyc5zjh6&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Lubowitz-Jenkins">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/hskxexiKRgmIRyc5zjh6"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/lubowitz-jenkins">Lubowitz-Jenkins</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Mountain View, CA
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Sandi Prairie
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/7/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/7/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>7 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://corwin.com/michel_rolfson" target="_blank" ng-click="trackJobClick(j)"
+                              href="https://corwin.com/michel_rolfson">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://hayes-mohr.com/martin" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://hayes-mohr.com/martin"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://hayes-mohr.com/martin" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://hayes-mohr.com/martin">
+                                  <meta itemprop="title" content="Dynamic Accounting Director">
+                                  <meta itemprop="description" content="Dynamic Accounting Director at Schumm, Hintz and Kunze">Dynamic Accounting Director</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/ZSjXWrlhTUORCo6shvrI&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Schumm, Hintz and Kunze">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/ZSjXWrlhTUORCo6shvrI"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/schumm-hintz-and-kunze">Schumm, Hintz and Kunze</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length"
+                                    itemprop="jobLocation" itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope"
+                                      ng-repeat="l in j.locations" itemprop="address">Auckland, NZ
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Thiel Trail
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/6/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/6/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>8 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://hayes-mohr.com/martin" target="_blank" ng-click="trackJobClick(j)" href="https://hayes-mohr.com/martin">Read
+                              more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                          <!-- ngInclude: '/network/jobs-browser/job-card.html' -->
+                          <div class="job-card ng-scope show-organization"
+                            ng-class="{&#39;liked&#39;: j.liked, &#39;discarded&#39;: j.discarded, &#39;prevent-discarded-overlay&#39;: j.discarded &amp;&amp; browseDiscardedJobs, &#39;show-organization&#39;: showOrganization}"
+                             itemscope="itemscope" itemtype="http://schema.org/JobPosting" style="">
+                            <!-- ngIf: j.discarded && !browseDiscardedJobs --><a class="overlay-link ng-scope" ng-href="https://ritchie.co/lashawnda.bashirian" target="_blank" ng-middle-click="trackJobClick(j)" ng-click="trackJobClick(j)"
+                              href="https://ritchie.co/lashawnda.bashirian"></a>
+                            <div class="job-info ng-scope">
+                              <h4><a ng-href="https://ritchie.co/lashawnda.bashirian" target="_blank" ng-click="trackJobClick(j)" ng-middle-click="trackJobClick(j)" class="ng-binding" href="https://ritchie.co/lashawnda.bashirian">
+                                  <meta itemprop="title" content="Sr. Backend Engineer">
+                                  <meta itemprop="description" content="Sr. Backend Engineer at Schultz-Koch">Sr. Backend Engineer</a><!-- ngIf: j.weight > 0 -->
+                              </h4>
+                              <div class="details">
+                                <!-- ngIf: showOrganization --><a class="thumbnail-wrapper ng-scope" ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                  href="https://jb.demo.getro.com/companies/schultz-koch">
+                                  <!-- ngIf: j.organization.logo_url -->
+                                  <div class="company-thumbnail ng-scope"
+                                    style="background-image: url(&quot;https://cdn.filepicker.io/api/file/WlfJS3lcQkKPTQFpbJhT&quot;);"></div><!-- end ngIf: j.organization.logo_url -->
+                                  <!-- ngIf: !j.organization.logo_url -->
+                                </a><!-- end ngIf: showOrganization -->
+                                <div class="details-main">
+                                  <div class="organization" ng-show="showOrganization" itemprop="hiringOrganization" itemscope="itemscope" itemtype="http://schema.org/Organization" aria-hidden="false">
+                                    <meta itemprop="name" content="Schultz-Koch">
+                                    <meta itemprop="logo" content="https://cdn.filepicker.io/api/file/WlfJS3lcQkKPTQFpbJhT"><a ng-click="openOrganizationModal(j.organization)" ui-sref="main.organization.profile({organizationId: j.organization.slug})"
+                                      class="ng-binding" href="https://jb.demo.getro.com/companies/schultz-koch">Schultz-Koch</a></div><!-- ngIf: j.locations.length --><span class="locations ng-scope" ng-if="j.locations.length" itemprop="jobLocation"
+                                    itemscope="itemscope" itemtype="http://schema.org/Place"><i class="fa fa-map-marker"></i><!-- ngRepeat: l in j.locations --><span class="location ng-binding ng-scope" ng-repeat="l in j.locations"
+                                      itemprop="address">Madrid, Spain
+                                      <!-- ngIf: !$last --><span ng-if="!$last" ng-bind="&#39;; &#39;" class="ng-binding ng-scope">; </span><!-- end ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --><span
+                                      class="location ng-binding ng-scope" ng-repeat="l in j.locations" itemprop="address">Maris Glen
+                                      <!-- ngIf: !$last --></span><!-- end ngRepeat: l in j.locations --></span><!-- end ngIf: j.locations.length -->
+                                  <!-- ngIf: j.created_at --><span class="added ng-scope" ng-if="j.created_at" angular-popover="angular-popover" template="Added on 6/5/2021" direction="top" mode="mouseover" background-color="#fff"
+                                    text-color="#1B2432">
+                                    <div class="angular-popover-container">
+                                      <div class="angular-popover hide-popover-element">
+                                        <!-- ngIf: isTemplateUrl() -->
+                                        <!-- ngIf: !isTemplateUrl() -->
+                                        <div ng-if="!isTemplateUrl()" class="angular-popover-template ng-scope"></div><!-- end ngIf: !isTemplateUrl() -->
+                                      </div>
+                                      <div class="angular-popover-triangle hide-popover-element angular-popover-triangle-top" ng-class="getTriangleClass()"></div>
+                                    </div>
+                                    <ng-transclude>
+                                      <meta itemprop="datePosted" content="Added on 6/5/2021" class="ng-scope"><i class="fa fa-clock-o ng-scope"></i>9 days</ng-transclude>
+                                  </span><!-- end ngIf: j.created_at -->
+                                </div>
+                              </div>
+                            </div><!-- ngIf: collectionFactory.showTalentDatabase --><a class="job-read-more btn ng-scope" ng-href="https://ritchie.co/lashawnda.bashirian" target="_blank" ng-click="trackJobClick(j)"
+                              href="https://ritchie.co/lashawnda.bashirian">Read more</a>
+                          </div><!-- end ngRepeat: j in jobs track by j.id -->
+                        </div>
+                        <div class="loading-block ng-hide" ng-show="loading" aria-hidden="true" style="">
+                          <div class="loader"></div>
+                        </div><!-- ngIf: filters.hasMore -->
+                        <div class="load-more-wrapper ng-scope" ng-if="filters.hasMore" ng-hide="loading" aria-hidden="false" style=""><button class="primary load-more monday-button" ng-click="nextPage()">Load More</button></div>
+                        <!-- end ngIf: filters.hasMore -->
+                        <!-- ngIf: collectionFactory.label=='svb' -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="powered-by-footer ng-scope" ng-hide="hidePoweredBy()" aria-hidden="false">
+      <div class="content"><a class="logo" href="https://www.getro.com/getro-jobs" target="_blank" ng-click="$root.wlcMondayLogoClick(&#39;powered-by-footer&#39;)" ng-middle-click="$root.wlcMondayLogoClick(&#39;powered-by-footer&#39;)">
+          <!-- ngIf: $root.inCustomDesignNetworkView -->
+          <!-- ngIf: !$root.inCustomDesignNetworkView -->
+          <div  class="ng-scope"><span>Powered by</span><svg width="196" height="35" viewBox="0 0 196 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M71.9079 17.0075C71.9079 7.35539 78.5827 0 88.2187 0C96.3525 0 102.055 5.24775 103.558 12.0404H95.8215C94.8057 9.22969 92.0647 7.12053 88.2187 7.12053C82.7381 7.12053 79.1568 11.3846 79.1568 17.006C79.1568 22.7692 82.7367 27.0791 88.2187 27.0791C92.5942 27.0791 95.7769 24.5963 96.3525 21.598H87.9093V15.5069H104.132C104.529 27.0333 97.9884 34.0135 88.2187 34.0135C78.5395 34.0151 71.9079 26.7069 71.9079 17.0075Z"
+                fill="#4000F9"></path>
+              <path
+                d="M107.048 21.177C107.048 13.4464 111.909 8.05834 119.026 8.05834C126.718 8.05834 130.741 14.0549 130.741 20.9436V23.0513H113.545C113.767 26.1898 115.932 28.4393 119.16 28.4393C121.856 28.4393 123.669 27.0332 124.331 25.4868H130.519C129.459 30.6873 125.214 34.0134 118.894 34.0134C112.131 34.0149 107.048 28.6269 107.048 21.177ZM124.376 18.2259C124.111 15.6028 122.078 13.5882 119.026 13.5882C116.109 13.5882 113.987 15.7904 113.678 18.2259H124.376Z"
+                fill="#4000F9"></path>
+              <path
+                d="M136.528 24.8327V14.3372H132.771V8.71428H134.981C136.219 8.71428 136.882 7.82364 136.882 6.51209V1.96739H143.38V8.667H149.481V14.3357H143.38V24.456C143.38 26.283 144.353 27.4085 146.386 27.4085H149.391V33.4051H144.662C139.578 33.4051 136.528 30.2665 136.528 24.8327Z"
+                fill="#4000F9"></path>
+              <path d="M154.119 8.6682H160.573V12.4168H160.927C161.722 10.5898 163.8 8.48062 166.938 8.48062H169.193V15.3205H166.496C163.137 15.3205 160.971 17.8979 160.971 22.1605V33.4048H154.119V8.6682Z" fill="#4000F9"></path>
+              <path
+                d="M169.942 21.0367C169.942 13.727 174.981 8.05834 182.54 8.05834C190.01 8.05834 195.094 13.727 195.094 21.0367C195.094 28.3448 190.01 34.015 182.496 34.015C175.026 34.015 169.942 28.3448 169.942 21.0367ZM188.154 21.0367C188.154 17.288 185.767 14.6176 182.496 14.6176C179.269 14.6176 176.882 17.288 176.882 21.0367C176.882 24.831 179.269 27.4557 182.496 27.4557C185.767 27.4557 188.154 24.7853 188.154 21.0367Z"
+                fill="#4000F9"></path>
+              <path d="M8.57266 33.37L0.548201 22.3834C-0.182734 21.3829 -0.182734 19.9845 0.548201 18.984L8.57266 7.99744H17.1439L8.96402 19.1975C8.3669 20.015 8.3669 21.3524 8.96402 22.1699L17.1439 33.37H8.57266Z" fill="#4000F9"></path>
+              <path d="M27.7741 33.3699L35.7986 22.3833C36.5281 21.3829 36.5281 19.9844 35.7986 18.9839L27.7741 7.99736H19.2029L27.3827 19.1959C27.9799 20.0134 27.9799 21.3508 27.3827 22.1683L19.2029 33.3684H27.7741V33.3699Z" fill="#4000F9"></path>
+              <path opacity="0.43" d="M41.2346 33.3699L49.259 22.3833C49.9885 21.3829 49.9885 19.9844 49.259 18.9839L41.2346 7.99736H32.6633L40.8432 19.1959C41.4403 20.0134 41.4403 21.3508 40.8432 22.1683L32.6633 33.3684H41.2346V33.3699Z"
+                fill="#4000F9"></path>
+              <path opacity="0.11" d="M54.695 33.3699L62.7194 22.3833C63.4489 21.3829 63.4489 19.9844 62.7194 18.9839L54.695 7.99736H46.1237L54.3036 19.1959C54.9007 20.0134 54.9007 21.3508 54.3036 22.1683L46.1237 33.3684H54.695V33.3699Z"
+                fill="#4000F9"></path>
+            </svg>
+          </div><!-- end ngIf: !$root.inCustomDesignNetworkView -->
+        </a>
+        <ul class="powered-by-footer__menu">
+          <li class="powered-by-footer__menu-item"><a ui-sref="main.trust.privacyPolicy" href="https://jb.demo.getro.com/trust/privacy">Privacy policy</a></li>
+          <li class="powered-by-footer__menu-item"><a ui-sref="main.trust.cookiePolicy" href="https://jb.demo.getro.com/trust/cookies">Cookie policy</a></li>
+          <li class="powered-by-footer__menu-item"><a id="cookie-settings" onclick="consentManager.openConsentManager()">Cookie preferences</a></li><!-- ngIf: collectionFactory.collection.legal.link -->
+          <!-- ngIf: collectionFactory.collection.legal.ccpa_compliant && collectionFactory.collection.legal.ccpa_policy_url -->
+        </ul>
+      </div>
+    </div><!-- ngIf: $root.inCustomDesignNetworkView && !$root.hideCustomDesign -->
+  </div>
+
+  <div ng-include="'advanced-design/footer.html'" class="custom-design-footer {{label}}-custom-part" id="{{label}}-custom-footer"></div>
+</body>
+
+</html>
